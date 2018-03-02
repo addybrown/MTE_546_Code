@@ -4,11 +4,7 @@ clc;
 %% Extended Kalman Filter Matlab
 
 load('system_model','-mat','Times','HorizontalPositionm','h','fn','time','data','h10','h_20')
-load('Trial1_Filtered','-mat','data_1')
-load('Stationary_Filtered','-mat','data_stat')
-load('condition_filtered','-mat','data_con')
-load('different_filtered','-mat','data_diff')
-load('random_filtered','-mat','data_rand','t_fil')
+
 %% Set up time step and parameters
 
 del_t = 0.005;            %time step
@@ -37,6 +33,7 @@ Q = diag([0.050 0.5]);
 R = diag([0.0880 0.1018 0.1018]);
 G = [1 del_t;
      0 1];
+
 %% Sensor Model
 H = zeros(nz,n,nT);
 h = zeros(nz,nT);
@@ -57,25 +54,25 @@ z(3,:) = data_1(:,6)';
 
 
 %% Simulated Sensor
-% 
-% xsim(1:n,1:nT)=0;
-% xsim(1,1) = 20;
-% xsim(2,1)=2;
-% 
-% for k = 2:nT
-%     
-%     xsim(:,k) = [20+2*t(k-1);
-%                   2;];
-%               
-%     xsim(:,k)= xsim(:,k) + mvnrnd(zeros(n,1),Q,1)';
-%     
-%     z(:,k) = [double(subs(h_fun20,d,xsim(1,k)));
-%               double(subs(h_fun10,d,xsim(1,k)));
-%               double(subs(h_fun10,d,xsim(1,k)));];
-%      z(:,k)= z(:,k)+ mvnrnd(zeros(nz,1), R, 1)'; 
-%      
-%      
-% end
+ 
+ xsim(1:n,1:nT)=0;
+ xsim(1,1) = 20;
+ xsim(2,1)=2;
+ 
+ for k = 2:nT
+    
+    xsim(:,k) = [20+2*t(k-1);
+                  2;];
+               
+     xsim(:,k)= xsim(:,k) + mvnrnd(zeros(n,1),Q,1)';
+    
+     z(:,k) = [double(subs(h_fun20,d,xsim(1,k)));
+              double(subs(h_fun10,d,xsim(1,k)));
+               double(subs(h_fun10,d,xsim(1,k)));];
+     z(:,k)= z(:,k)+ mvnrnd(zeros(nz,1), R, 1)'; 
+     
+     
+ end
 
 %% Begin simulation
 for k = 2:nT
